@@ -6,26 +6,35 @@
     <script>
         function performAction(action) {
             const branchId = document.getElementById('branch_id').value;
+            const data = action.includes('delete_orders') || action.includes('delete_orderstocks') || action.includes('delete_inventorycountings') 
+                ? `action=${action}&branch_id=${branchId}` 
+                : `action=${action}`;
             fetch('/menu', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `action=${action}&branch_id=${branchId}`
+                body: data
             })
             .then(response => response.json())
-            .then(data => alert(data.message));
+            .then(data => alert(data.message))
+            .catch(error => alert('Error: ' + error));
         }
     </script>
 </head>
 <body>
     <h1>Menu</h1>
-    <label>Select Branch:</label>
+    <label>Select Branch (for Orders, Orderstocks, Inventorycountings):</label>
     <select id="branch_id">
         {% for branch in branches %}
             <option value="{{ branch['Id'] }}">{{ branch['Name'] }}</option>
         {% endfor %}
     </select><br>
     <button onclick="performAction('delete_orders')">Delete All Orders</button>
+    <button onclick="performAction('delete_orderstocks')">Delete All Orderstocks</button>
+    <button onclick="performAction('delete_inventorycountings')">Delete All Inventorycountings</button>
+    <button onclick="performAction('delete_accountingtransactions')">Delete All Accounting Transactions</button>
     <button onclick="performAction('delete_products')">Delete All Products</button>
-    <!-- Thêm các nút khác cho orderstocks, inventorycountings, v.v. -->
+    <button onclick="performAction('delete_customers')">Delete All Customers</button>
+    <button onclick="performAction('delete_suppliers')">Delete All Suppliers</button>
+    <button onclick="performAction('delete_categories')">Delete All Categories</button>
 </body>
 </html>
