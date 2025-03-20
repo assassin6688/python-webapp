@@ -1,1 +1,31 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Menu</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function performAction(action) {
+            const branchId = document.getElementById('branch_id').value;
+            fetch('/menu', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=${action}&branch_id=${branchId}`
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message));
+        }
+    </script>
+</head>
+<body>
+    <h1>Menu</h1>
+    <label>Select Branch:</label>
+    <select id="branch_id">
+        {% for branch in branches %}
+            <option value="{{ branch['Id'] }}">{{ branch['Name'] }}</option>
+        {% endfor %}
+    </select><br>
+    <button onclick="performAction('delete_orders')">Delete All Orders</button>
+    <button onclick="performAction('delete_products')">Delete All Products</button>
+    <!-- Thêm các nút khác cho orderstocks, inventorycountings, v.v. -->
+</body>
+</html>
